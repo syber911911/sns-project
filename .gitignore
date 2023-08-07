@@ -39,3 +39,6 @@ out/
 ### sqlite ###
 *.sqlite
 *.sql
+
+### static image ###
+images/
