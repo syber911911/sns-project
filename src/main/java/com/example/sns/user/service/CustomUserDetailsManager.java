@@ -66,14 +66,14 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     }
 
     public JwtDto loginUser(UserLoginDto request) {
-        UserDetails user = this.loadUserByUsername(request.getUsername());
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+        UserDetails userDetails = this.loadUserByUsername(request.getUsername());
+        if (!passwordEncoder.matches(request.getPassword(), userDetails.getPassword()))
             throw new UserException(UserExceptionType.WRONG_PASSWORD);
         return jwtUtils.generateToken(request.getUsername());
     }
 
     public ResponseDto uploadProfileImage(String username, MultipartFile profileImage) {
-        UserEntity user = this.getUserEntity(username);
+        UserEntity userEntity = this.getUserEntity(username);
 
         // 사용자 프로필 이미지 저장 디렉토리
         String imageDir = String.format("images/profiles/%s/", username);
@@ -103,8 +103,8 @@ public class CustomUserDetailsManager implements UserDetailsManager {
         }
 
         // userEntity 에 이미지 경로 추가 및 저장
-        user.updateProfileImage(String.format("/profile/%s/%s", username, profileImageFileName));
-        userRepository.save(user);
+        userEntity.updateProfileImage(String.format("/profile/image/%s/%s", username, profileImageFileName));
+        userRepository.save(userEntity);
 
         ResponseDto response = new ResponseDto();
         response.setMessage("프로필 이미지가 업로드 되었습니다");
@@ -144,16 +144,16 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     }
 
     public UserEntity getUserEntity(String username) {
-        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isEmpty()) throw new UserException(UserExceptionType.NOT_FOUND_USERNAME);
-        return optionalUser.get();
+        Optional<UserEntity> optionalUserEntity = userRepository.findByUsername(username);
+        if (optionalUserEntity.isEmpty()) throw new UserException(UserExceptionType.NOT_FOUND_USERNAME);
+        return optionalUserEntity.get();
     }
     @Override
     // username 으로 user 조회 후 entity 를 userDetails 로 변환 후 반환
     public UserDetails loadUserByUsername(String username) {
-        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isEmpty()) throw new UserException(UserExceptionType.NOT_FOUND_USERNAME);
-        UserEntity user = optionalUser.get();
-        return CustomUserDetails.fromEntity(user);
+        Optional<UserEntity> optionalUserEntity = userRepository.findByUsername(username);
+        if (optionalUserEntity.isEmpty()) throw new UserException(UserExceptionType.NOT_FOUND_USERNAME);
+        UserEntity userEntity = optionalUserEntity.get();
+        return CustomUserDetails.fromEntity(userEntity);
     }
 }

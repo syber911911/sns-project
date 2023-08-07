@@ -73,7 +73,6 @@ public class CustomUserDetails implements UserDetails {
                 .email(userRegisterDto.getEmail())
                 .phone(userRegisterDto.getPhone())
                 .address(userRegisterDto.getAddress())
-                .profileImg(userRegisterDto.getProfileImg())
                 .build();
     }
 }
