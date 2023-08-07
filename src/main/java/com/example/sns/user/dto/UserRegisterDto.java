@@ -29,5 +29,4 @@ public class UserRegisterDto {
     private String phone;
 
     private String address;
-    private String profileImg;
 }
