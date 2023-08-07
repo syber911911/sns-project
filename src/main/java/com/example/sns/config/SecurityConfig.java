@@ -42,7 +42,8 @@ public class SecurityConfig {
         return (web) -> web
                 .ignoring()
                 .requestMatchers(HttpMethod.POST, "/auth/**")
-                .requestMatchers("/profile/**")
+                .requestMatchers("/profile/image/**")
+                .requestMatchers("/article/image/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
