@@ -18,7 +18,7 @@ Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
 
 ## ⚙️ 구현 기능
 ### DB ERD
-<img src="https://github.com/likelion-backend-5th/Project_1_LeeHeeJun/assets/64578367/2231d3b3-ea24-4bf5-8681-648076c2b3d6" width="500" height="500">
+<img src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/b8948053-f239-4dd4-989a-bf93e063575c" width="900" height="500">
 
 ## DAY 1
 ### 회원 가입, 로그인, 사용자 프로필 이미지 업로드, 인증 및 JWT 발급
@@ -142,13 +142,35 @@ Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
  - 해당 요청은 헤더의 content type 이 지정한 MediaType.MULTIPART_FORM_DATA_VALUE 과 일치할 때 동작합니다.
  - requestBody(form-data) 가 빈 상태로 요청을 보낼 시 헤더에 content type 이 포함되지 않아 예외를 발생시킬 수 있습니다.
 
+*** 의도되지 않은 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/f0acbe43-114f-4134-a658-fa8c947384bf">
+
+*** 예외는 발생시키지만 service 에서 판단 후 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/f4c95bbd-a09f-4bf5-9324-db88e1df1098">
+
 ### 피드 등록
  - 피드 등록 요청 시에 requestBody(form-data) 가 빈 상태로 요청을 보내는 것을 주의해주세요
  - 해당 요청은 헤더의 content type 이 지정한 MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_JSON_VALUE 과 일치할 때 동작합니다.
  - requestBody(form-data) 가 빈 상태로 요청을 보낼 시 헤더에 content type 이 포함되지 않아 예외를 발생시킬 수 있습니다.
 
+*** 의도되지 않은 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/cc8450ad-9fed-4a9d-acb2-fb8daba54f1a">
+
+*** Validation 에서 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/a0793744-4266-42fa-8359-7999758a263d">
+
+*** 정상 처리가 가능한 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/dd841cee-60a1-4388-8f58-defbe7ef2c1d">
+<img width="1486" alt="스크린샷 2023-08-08 오후 11 13 28" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/a1369833-dfb1-489b-b46a-0e60d597b3e2">
+
 ### targetUser 의 피드 전체 조회
  - requestParameter 가 빈 상태로 요청을 보내는 것을 주의해주세요
+
+*** 의도되지 않은 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/50345341-8c17-4bc9-be0c-e34558261ee5">
+
+*** 예외는 발생시키지만 service 에서 판단 후 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/818ed60f-6634-449c-b47e-3f4bd18e878b">
 
 ### 단일 피드 수정
  - requestBody(form-data) 가 빈 상태로 요청을 보내는 것을 주의해주세요
@@ -156,10 +178,20 @@ Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
  - 단일 피드 수정의 경우 이미지를 추가하고 싶다면 addImages Key 항목에 추가할 이미지를 첨부해 요청을 보내세요
  - 단일 피드 수정의 경우 이미지를 삭제하고 싶다면 deleteImages Key 항목에 삭제할 이미지의 접근 경로를 첨부해 요청을 보내세요(피드 조회 시 반환되는 imageUrl)
    - 여러 이미지를 동시에 삭제하고 싶다면 deleteImages Key 항목을 추가해 요청을 보내세요
-   
+
+*** 의도되지 않은 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/28d494a2-02d7-43ec-b04c-a303080768d8">
+
+*** 예외는 발생시키지만 service 에서 판단 후 예외를 발생시키는 요청 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/b39e5ec2-1334-4eb3-b635-aa68c4e013f3">
+
+*** 여러 장의 사진을 삭제하고 싶은 경우 ***
+*** 삭제하고자 하는 사진은 read 요청의 결과로 반환되는 url 을 입력해주세요 ***
+<img width="1486" alt="image" src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/f0282013-f134-4524-be48-816bdae9b4e2">
+
 ## 추가 정보
-[Application.yaml & Postman Collection](https://www.notion.so/Spring-13646b407a5140c6b05c86400d94b63a)
-해당 노션 페이지에 접속 후 Market Project2 토글을 열면 yaml 파일과 Postman Collection 이 존재합니다
+[Postman Collection](https://www.notion.so/Spring-13646b407a5140c6b05c86400d94b63a)
+해당 노션 페이지에 접속 후 SNS Project 토글을 열면 Postman Collection 이 존재합니다
 
 
 
