@@ -1,6 +1,7 @@
 package com.example.sns.article.controller;
 
 import com.example.sns.article.dto.CreateArticleDto;
+import com.example.sns.article.dto.ReadArticleDto;
 import com.example.sns.article.service.ArticleService;
 import com.example.sns.global.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -30,5 +31,10 @@ public class ArticleController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseDto createArticle(@AuthenticationPrincipal String username, @RequestPart(value = "article") @Valid CreateArticleDto request, @RequestPart(value = "image", required = false) List<MultipartFile> articleImages) {
         return articleService.createArticle(username, request, articleImages);
+    }
+
+    @GetMapping
+    public List<ReadArticleDto> readAllArticles(@RequestParam(value = "targetUser") String targetUser) {
+        return articleService.readAll(targetUser);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sns.article.service;
 
 import com.example.sns.article.dto.CreateArticleDto;
+import com.example.sns.article.dto.ReadArticleDto;
 import com.example.sns.article.entity.ArticleEntity;
 import com.example.sns.article.entity.ArticleImageEntity;
 import com.example.sns.article.repository.ArticleImageRepository;
@@ -107,5 +108,42 @@ public class ArticleService {
         response.setHttpStatus(HttpStatus.OK);
         response.setMessage("피드 등록이 완료되었습니다.");
         return response;
+    }
+
+    // target user 의 모든 피드 조회
+    public List<ReadArticleDto> readAll(String targetUser) {
+        // 사용자가 조회할 사용자를 입력하지 않은 경우
+        if (targetUser.isEmpty() || targetUser.isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "조회할 사용자를 입력해주세요");
+        UserEntity targetUserEntity = ((CustomUserDetailsManager) userDetailsManager).getUserEntity(targetUser);
+
+        List<ArticleEntity> articleEntities = articleRepository.findAllByUser(targetUserEntity);
+        if (articleEntities.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 사용자가 작성한 글이 없습니다.");
+
+        List<ReadArticleDto> readArticleDtoList = new ArrayList<>();
+        for (ArticleEntity article : articleEntities) {
+            if (article.getDraft()) {
+                // 기본 이미지 반환
+                String basicImage = "/article/image/basic/basicImage.png";
+                readArticleDtoList.add(
+                        ReadArticleDto.builder()
+                                .username(targetUser)
+                                .title(article.getTitle())
+                                .content(article.getContent())
+                                .articleImage(basicImage)
+                                .build()
+                );
+            } else {
+                String articleImage = articleImageRepository.findFirstByArticle(article).getArticleImage();
+                readArticleDtoList.add(
+                        ReadArticleDto.builder()
+                                .username(targetUser)
+                                .title(article.getTitle())
+                                .content(article.getContent())
+                                .articleImage(articleImage)
+                                .build()
+                );
+            }
+        }
+        return readArticleDtoList;
     }
 }
