@@ -3,12 +3,14 @@ package com.example.sns.article.controller;
 import com.example.sns.article.dto.CreateArticleDto;
 import com.example.sns.article.dto.ReadArticleDto;
 import com.example.sns.article.dto.ReadArticleListDto;
+import com.example.sns.article.dto.UpdateArticleDto;
 import com.example.sns.article.service.ArticleService;
 import com.example.sns.global.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +32,9 @@ public class ArticleController {
     // 사실 해당 요청에서 둘다 비어있는 것은 말이 안된다.
     // 최초 피드 등록시 등록 이미지를 포함하지 않는 경우가 있기 때문에 required false
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDto createArticle(@AuthenticationPrincipal String username, @RequestPart(value = "article") @Valid CreateArticleDto request, @RequestPart(value = "image", required = false) List<MultipartFile> articleImages) {
-        return articleService.createArticle(username, request, articleImages);
+    // @RequestPart(value = "article") @Valid CreateArticleDto request, @RequestPart(value = "image", required = false) List<MultipartFile> articleImages
+    public ResponseDto createArticle(@AuthenticationPrincipal String username, @ModelAttribute @Valid CreateArticleDto request) {
+        return articleService.createArticle(username, request);
     }
 
     @GetMapping
@@ -42,5 +45,15 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public ReadArticleDto readArticle(@PathVariable("articleId") Long articleId) {
         return articleService.readArticle(articleId);
+    }
+
+    @PutMapping(value = "/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseDto updateArticle(@PathVariable("articleId") Long articleId, @ModelAttribute UpdateArticleDto request, @AuthenticationPrincipal String username) {
+        return articleService.updateArticle(articleId, request, username);
+    }
+
+    @DeleteMapping("/{articleId}")
+    public ResponseDto deleteArticle(@PathVariable("articleId") Long articleId, @AuthenticationPrincipal String username) {
+        return articleService.deleteArticle(articleId, username);
     }
 }

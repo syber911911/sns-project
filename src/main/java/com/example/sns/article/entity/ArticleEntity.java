@@ -43,8 +43,11 @@ public class ArticleEntity {
         this.draft = draft;
     }
 
-    public void updateArticle(String title, String content) {
+    public void updateTitle(String title) {
         this.title = title;
+    }
+
+    public void updateContent(String content) {
         this.content = content;
     }
 
