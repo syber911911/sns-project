@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ToString
 @Builder
-public class ReadArticleDto {
+public class ReadArticleListDto {
     private String username;
     private String title;
     private String content;
-    private List<String> articleImages;
+    private String articleImage;
 }

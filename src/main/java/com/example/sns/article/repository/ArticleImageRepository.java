@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ArticleImageRepository extends JpaRepository<ArticleImageEntity, Long> {
     ArticleImageEntity findFirstByArticle(ArticleEntity article);
+    List<ArticleImageEntity> findAllByArticle(ArticleEntity article);
 }

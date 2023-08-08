@@ -2,6 +2,7 @@ package com.example.sns.article.controller;
 
 import com.example.sns.article.dto.CreateArticleDto;
 import com.example.sns.article.dto.ReadArticleDto;
+import com.example.sns.article.dto.ReadArticleListDto;
 import com.example.sns.article.service.ArticleService;
 import com.example.sns.global.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -34,7 +35,12 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<ReadArticleDto> readAllArticles(@RequestParam(value = "targetUser") String targetUser) {
-        return articleService.readAll(targetUser);
+    public List<ReadArticleListDto> readAllArticles(@RequestParam(value = "targetUser") String targetUser) {
+        return articleService.readAllArticle(targetUser);
+    }
+
+    @GetMapping("/{articleId}")
+    public ReadArticleDto readArticle(@PathVariable("articleId") Long articleId) {
+        return articleService.readArticle(articleId);
     }
 }

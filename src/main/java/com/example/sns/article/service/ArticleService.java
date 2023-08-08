@@ -2,6 +2,7 @@ package com.example.sns.article.service;
 
 import com.example.sns.article.dto.CreateArticleDto;
 import com.example.sns.article.dto.ReadArticleDto;
+import com.example.sns.article.dto.ReadArticleListDto;
 import com.example.sns.article.entity.ArticleEntity;
 import com.example.sns.article.entity.ArticleImageEntity;
 import com.example.sns.article.repository.ArticleImageRepository;
@@ -23,6 +24,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArticleService {
@@ -111,7 +113,7 @@ public class ArticleService {
     }
 
     // target user 의 모든 피드 조회
-    public List<ReadArticleDto> readAll(String targetUser) {
+    public List<ReadArticleListDto> readAllArticle(String targetUser) {
         // 사용자가 조회할 사용자를 입력하지 않은 경우
         if (targetUser.isEmpty() || targetUser.isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "조회할 사용자를 입력해주세요");
         UserEntity targetUserEntity = ((CustomUserDetailsManager) userDetailsManager).getUserEntity(targetUser);
@@ -119,13 +121,13 @@ public class ArticleService {
         List<ArticleEntity> articleEntities = articleRepository.findAllByUser(targetUserEntity);
         if (articleEntities.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 사용자가 작성한 글이 없습니다.");
 
-        List<ReadArticleDto> readArticleDtoList = new ArrayList<>();
+        List<ReadArticleListDto> readArticleDtoList = new ArrayList<>();
         for (ArticleEntity article : articleEntities) {
             if (article.getDraft()) {
                 // 기본 이미지 반환
                 String basicImage = "/article/image/basic/basicImage.png";
                 readArticleDtoList.add(
-                        ReadArticleDto.builder()
+                        ReadArticleListDto.builder()
                                 .username(targetUser)
                                 .title(article.getTitle())
                                 .content(article.getContent())
@@ -135,7 +137,7 @@ public class ArticleService {
             } else {
                 String articleImage = articleImageRepository.findFirstByArticle(article).getArticleImage();
                 readArticleDtoList.add(
-                        ReadArticleDto.builder()
+                        ReadArticleListDto.builder()
                                 .username(targetUser)
                                 .title(article.getTitle())
                                 .content(article.getContent())
@@ -145,5 +147,35 @@ public class ArticleService {
             }
         }
         return readArticleDtoList;
+    }
+
+    public ReadArticleDto readArticle(Long articleId) {
+        Optional<ArticleEntity> optionalArticleEntity = articleRepository.findById(articleId);
+        if (optionalArticleEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 피드가 존재하지 않습니다.");
+
+        ArticleEntity articleEntity = optionalArticleEntity.get();
+        String basicImage = "/article/image/basic/basicImage.png";
+        List<String> articleImageList = new ArrayList<>();
+
+        if (articleEntity.getDraft()) {
+            articleImageList.add(basicImage);
+            return ReadArticleDto.builder()
+                    .username(articleEntity.getUser().getUsername())
+                    .title(articleEntity.getTitle())
+                    .content(articleEntity.getContent())
+                    .articleImages(articleImageList)
+                    .build();
+        }
+
+        List<ArticleImageEntity> articleImageEntityList = articleImageRepository.findAllByArticle(articleEntity);
+        for (ArticleImageEntity articleImageEntity : articleImageEntityList) {
+            articleImageList.add(articleImageEntity.getArticleImage());
+        }
+        return ReadArticleDto.builder()
+                .username(articleEntity.getUser().getUsername())
+                .title(articleEntity.getTitle())
+                .content(articleEntity.getContent())
+                .articleImages(articleImageList)
+                .build();
     }
 }
