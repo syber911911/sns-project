@@ -73,6 +73,7 @@ public class CustomUserDetailsManager implements UserDetailsManager {
     }
 
     public ResponseDto uploadProfileImage(String username, MultipartFile profileImage) {
+        if (profileImage.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "업로드 할 이미지가 존재하지 않습니다.");
         UserEntity userEntity = this.getUserEntity(username);
 
         // 사용자 프로필 이미지 저장 디렉토리
