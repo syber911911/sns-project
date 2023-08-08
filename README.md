@@ -6,7 +6,7 @@ Spring Boot Project - SNS 플랫폼 api
 Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
 
 ## 🗓️ 프로젝트 기간
-2023.08.03 ~ 2023.08.08
+2023.08.03 ~ 
 
 ## 🧑🏻‍💻 개발환경
 - `java version 17`
@@ -20,7 +20,7 @@ Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
 ### DB ERD
 <img src="https://github.com/likelion-backend-5th/Project_2_LEEHEEJUN/assets/64578367/b8948053-f239-4dd4-989a-bf93e063575c" width="900" height="500">
 
-## DAY 1
+## 회원 기능
 ### 회원 가입, 로그인, 사용자 프로필 이미지 업로드, 인증 및 JWT 발급
  기능 | HTTP METHOD | URL
  --- | ----------- | ---
@@ -79,7 +79,7 @@ Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
 - UserDetails 와 Manager 의 기능을 Jwt 인증과정에서 사용하지 않기 때문에 굳이 해당 형태로 구현할 이유가 없다고 판단된다.
 - UserDetails 는 Dto 로 바꾸고 Manager 는 loadUserByUsername 이 필요하기 때문에 Manager 의 구현체가 아닌 일반적인 UserService 로 변환해도 괜찮겠다는 생각
 
-## DAY 2
+## 피드 기능
 ### 피드 생성, Target User 피드 전체 조회, 피드 단일 조회, 피드 수정, 피드 삭제
  기능 | HTTP METHOD | URL
  --- |-------------| ---
