@@ -1,12 +1,5 @@
-# 멋쟁이 사자처럼 백엔트 스쿨 5기 - LEEHEEJUN
-# 📮멋사SNS📮
-Spring Boot Project - SNS 플랫폼 api
-
 ## 📒프로젝트 개요
 Spring Boot 를 기반으로한 SNS 플랫폼 api 개발 프로젝트
-
-## 🗓️ 프로젝트 기간
-2023.08.03 ~ 
 
 ## 🧑🏻‍💻 개발환경
 - `java version 17`
